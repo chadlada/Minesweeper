@@ -40,21 +40,25 @@ export function App() {
   }
 
   async function handleClickCell(row: number, col: number) {
-    // Generate the URL we need
-    const url = `https://minesweeper-api.herokuapp.com/`
-    // Make an object to send as JSON
-    const body = { row: row, column: col }
-    // Make a POST request to make a move
-    const response = await fetch(url, {
+    const checkOptions = {
+      id: game.id,
+      row,
+      col,
+    }
+    const url = `https://minesweeper-api.herokuapp.com/games/${game.id}/check`
+    const fetchOptions = {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
-      body: JSON.stringify(body),
-    })
+      body: JSON.stringify(checkOptions),
+    }
+
+    const response = await fetch(url, fetchOptions)
+
     if (response.ok) {
       // Get the response as JSON
-      const newGameState = await response.json()
+      const newGameStateJSON = await response.json()
       // Make that the new state!
-      setGame(newGameState)
+      setGame(newGameStateJSON)
     }
   }
 
