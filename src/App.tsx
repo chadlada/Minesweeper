@@ -1,4 +1,40 @@
-import React from 'react'
+import React, { useState } from 'react'
+
+export function App() {
+  const [game, setGame] = useState({
+    id: undefined,
+    board: [
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+      [' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '],
+    ],
+    state: undefined,
+    mines: undefined,
+  })
+
+async function handleClickCell(row: number, column: number) {
+  // Generate the URL we need
+  const url = `https://minesweeper-api.herokuapp.com/`
+  // Make an object to send as JSON
+  const body = { row: row, column: column }
+  // Make a POST request to make a move
+  const response = await fetch(url, {
+  method: 'POST',
+  headers: { 'content-type': 'application/json' },
+  body: JSON.stringify(body),
+  })
+  if (response.ok) {
+  // Get the response as JSON
+  const newGameState = await response.json()
+  // Make that the new state!
+  setGame(newGameState)
+  }
+  }
 
 export function App() {
   return (
